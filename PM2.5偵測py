@@ -1,0 +1,29 @@
+import time
+
+def sendmail(message):
+    import smtplib
+    from_addr="i.hate.this.thing.dude@gmail.com"
+    to_addr="i.hate.this.thing.dude@gmail.com"
+    smtpssl=smtplib.SMTP_SSL("smtp.gmail.com",465)
+    smtpssl.login("i.hate.this.thing.dude@gmail.com","a2826612a")
+    msg="Subject:Python Sent Mail\n"
+    msg+="Now PM2.5="+message
+    smtpssl.sendmail(from_addr,to_addr,msg,mail_options=(),rcpt_options=())
+    smtpssl.quit()
+
+
+
+while true:
+    import requests, json
+    import urllib3
+    urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
+    response = requests.get('https://opendata.epa.gov.tw/ws/Data/ATM00625/?$format=json', verify=False)
+    sites = response.json()
+    for site in sites:
+        if site['Site'] == '復興':
+            print('現在 復興站 PM2.5='+site['PM25'])
+            sendmail(site['PM25'])
+            break
+    time.sleep(3600)
+
+
